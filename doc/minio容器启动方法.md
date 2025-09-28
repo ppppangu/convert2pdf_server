@@ -12,8 +12,8 @@ cd /data/v2/minio_storage
 
 ```bash
 docker run -p 9000:9000 -p 9001:9001 --name minio -d --restart=always \
-  -e "MINIO_ROOT_USER=N3rN" \
-  -e "MINIO_ROOT_PASSWORD=N3eN" \
+  -e "MINIO_ROOT_USER=YourUserName" \
+  -e "MINIO_ROOT_PASSWORD=YourPassword" \
   -v ./data:/data \
   minio/minio:RELEASE.2025-03-12T18-04-18Z server /data \
   --address ":9000" \
