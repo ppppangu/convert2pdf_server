@@ -1,21 +1,19 @@
-version: "3"
-
 services:
   convert-service:
     build:
-      context: .
-      dockerfile: dockerfile
+      context: ./server
+      dockerfile: ../dockerfile
     container_name: convert-file2pdf-server
     ports:
       - "7758:7758"
     environment:
       - S3_BUCKET_NAME=publicfiles
-      - S3_ACCESS_KEY_ID=your_access_key
-      - S3_SECRET_ACCESS_KEY=your_secret_key
+      - S3_ACCESS_KEY_ID=N3rMh2z4wLKa8eN
+      - S3_SECRET_ACCESS_KEY=N3rMh2z4wLKa8eN
       - S3_REGION=us-east-1
-      - S3_ENDPOINT_URL=http://your-s3-endpoint
+      - S3_ENDPOINT_URL=http://host.docker.internal:9000
       - PDF_EXPIRE_TIME=60
-      - DOWNLOAD_URL_PREFIX=http://your-download-url
+      - DOWNLOAD_URL_PREFIX=http://127.0.0.1:9000
     volumes:
       - ./logs:/app/logs
     restart: unless-stopped

@@ -1,92 +1,17 @@
 FROM ubuntu:22.04
 
-# 安装Python、必要的构建工具和全面的字体支持
-RUN apt-get update && apt-get install -y software-properties-common && \
-    add-apt-repository universe && add-apt-repository multiverse && apt-get update && apt-get install -y \
+# 安装运行转换服务所需的最小依赖，降低构建失败率
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
     python3-dev \
     build-essential \
     curl \
-    # 中文字体
-    fonts-wqy-zenhei \
-    fonts-wqy-microhei \
-    # 更全面的字体支持
-    fonts-noto \
-    fonts-noto-cjk \
-    fonts-noto-cjk-extra \
-    fonts-noto-color-emoji \
-    fonts-noto-mono \
-    fonts-noto-ui-core \
-    # 西方字体
-    fonts-dejavu \
-    fonts-dejavu-core \
-    fonts-dejavu-extra \
-    fonts-liberation \
-    fonts-liberation2 \
-    fonts-freefont-ttf \
-    fonts-opensymbol \
-    # 系统和基础字体
-    fonts-urw-base35 \
-    xfonts-utils \
+    ca-certificates \
     fontconfig \
-    # 拉丁文和欧洲字体
-    fonts-liberation \
-    fonts-crosextra-carlito \
-    fonts-crosextra-caladea \
-    fonts-roboto \
-    fonts-open-sans \
-    fonts-ubuntu \
-    # 多语言支持的综合字体
-    fonts-noto-unhinted \
-    fonts-ipafont \
-    fonts-ipafont-gothic \
-    fonts-ipafont-mincho \
-    fonts-arphic-ukai \
-    fonts-arphic-uming \
-    fonts-arphic-bkai00mp \
-    fonts-arphic-bsmi00lp \
-    fonts-arphic-gbsn00lp \
-    fonts-arphic-gkai00mp \
-    fonts-thai-tlwg \
-    fonts-kacst \
-    fonts-kacst-one \
-    fonts-khmeros \
-    fonts-khmeros-core \
-    fonts-lklug-sinhala \
-    fonts-sil-abyssinica \
-    fonts-sil-ezra \
-    fonts-sil-padauk \
-    fonts-tibetan-machine \
-    fonts-indic \
-    fonts-beng \
-    fonts-beng-extra \
-    fonts-gujr \
-    fonts-gujr-extra \
-    fonts-knda \
-    fonts-mlym \
-    fonts-orya \
-    fonts-orya-extra \
-    fonts-telu \
-    fonts-telu-extra \
-    fonts-samyak \
-    fonts-samyak-taml \
-    fonts-samyak-gujr \
-    fonts-samyak-deva \
-    fonts-sarai \
-    fonts-kalapi \
-    fonts-nakula \
-    fonts-navilu \
-    fonts-gargi \
-    # MS兼容字体
-    cabextract \
+    fonts-wqy-zenhei \
+    fonts-noto-cjk \
     libreoffice \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 安装MS核心字体（需要接受EULA）
-RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections \
-    && apt-get update && apt-get install -y ttf-mscorefonts-installer \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && fc-cache -fv
@@ -101,10 +26,12 @@ COPY pyproject.toml ./
 RUN echo "starlette==0.31.1" > requirements.txt && \
     echo "pydantic==2.5.3" >> requirements.txt && \
     echo "boto3==1.28.65" >> requirements.txt && \
+    echo "minio==7.2.15" >> requirements.txt && \
     echo "loguru==0.7.0" >> requirements.txt && \
     echo "uvicorn==0.23.2" >> requirements.txt && \
     echo "aiohttp==3.8.5" >> requirements.txt && \
-    echo "python-multipart==0.0.6" >> requirements.txt
+    echo "python-multipart==0.0.6" >> requirements.txt && \
+    echo "python-dotenv==1.1.0" >> requirements.txt
 
 # asyncio是Python标准库，不需要通过pip安装
 
